@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hydra Ops - Softair Team</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #1a1a1a;
+            color: white;
+            text-align: center;
+        }
+        header {
+            background-color: #004d00;
+            padding: 20px;
+        }
+        .logo {
+            width: 150px;
+        }
+        nav {
+            margin: 20px 0;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 18px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+        }
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .gallery img {
+            width: 200px;
+            height: auto;
+            border-radius: 10px;
+        }
+        footer {
+            background-color: #004d00;
+            padding: 10px;
+            margin-top: 20px;
+        }
+    </style>
+    <script>
+        async function loadInstagramImages() {
+            const username = 'hydraops'; // Sostituisci con il nome utente dell'associazione
+            const response = await fetch(`https://www.instagram.com/${username}/?__a=1`);
+            const data = await response.json();
+            const images = data.graphql.user.edge_owner_to_timeline_media.edges.slice(0, 10);
+            
+            const gallery = document.getElementById('gallery');
+            images.forEach(image => {
+                const imgElement = document.createElement('img');
+                imgElement.src = image.node.display_url;
+                gallery.appendChild(imgElement);
+            });
+        }
+        
+        window.onload = loadInstagramImages;
+    </script>
+</head>
+<body>
+    <header>
+        <img src="logo.png" alt="Hydra Ops Logo" class="logo">
+        <h1>Hydra Ops - Softair Team</h1>
+        <nav>
+            <a href="#about">Chi Siamo</a>
+            <a href="#events">Eventi</a>
+            <a href="#gallery">Galleria</a>
+            <a href="#contact">Contatti</a>
+        </nav>
+    </header>
+    <div class="container">
+        <section id="about">
+            <h2>Chi Siamo</h2>
+            <p>Hydra Ops è un'associazione sportiva dilettantistica dedicata al softair. Unisciti a noi per vivere emozioni uniche e avventure strategiche.</p>
+        </section>
+        <section id="events">
+            <h2>Eventi</h2>
+            <p>Partecipa ai nostri tornei e sessioni di addestramento per migliorare le tue abilità sul campo.</p>
+        </section>
+        <section id="gallery">
+            <h2>Galleria</h2>
+            <div id="gallery" class="gallery"></div>
+        </section>
+        <section id="contact">
+            <h2>Contatti</h2>
+            <p>Email: info@hydraops.com</p>
+            <p>Telefono: +39 123 456 7890</p>
+        </section>
+    </div>
+    <footer>
+        <p>&copy; 2025 Hydra Ops - Softair Team. Tutti i diritti riservati.</p>
+    </footer>
+</body>
+</html>
