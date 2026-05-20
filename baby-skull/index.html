@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Baby Skull Tattoo — App Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{--green:#2E7D32;--green-light:#4CAF50;--green-dark:#1B5E20;--green-bg:#E8F5E9;--green-mid:#C8E6C9;--black:#111;--white:#fff;--gray:#f5f5f5;--gray2:#e0e0e0;--gray3:#9e9e9e;--font-head:'Bebas Neue',sans-serif;--font-body:'DM Sans',sans-serif;--radius:14px;--radius-sm:8px;--shadow:0 4px 24px rgba(0,0,0,0.10);--shadow-lg:0 8px 40px rgba(0,0,0,0.18);}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;font-family:var(--font-body);background:#1a1a1a;display:flex;align-items:center;justify-content:center;min-height:100vh;}
+svg.ic{display:inline-block;vertical-align:middle;flex-shrink:0;}
+.phone-shell{width:390px;height:844px;background:var(--white);border-radius:44px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 0 0 10px #222,0 0 0 12px #333,var(--shadow-lg);}
+@media(max-width:420px){.phone-shell{width:100vw;height:100dvh;border-radius:0;box-shadow:none;}html,body{padding:0;align-items:flex-start;}}
+.status-bar{display:flex;justify-content:space-between;align-items:center;padding:14px 24px 8px;font-size:12px;font-weight:600;color:var(--black);flex-shrink:0;}
+.screen{display:none;flex:1;overflow:hidden;flex-direction:column;}
+.screen.active{display:flex;}
+.scroll-content{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.scroll-content::-webkit-scrollbar{display:none;}
+.bottom-nav{display:flex;border-top:1px solid var(--gray2);background:var(--white);flex-shrink:0;padding:4px 0 16px;}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 0;cursor:pointer;color:var(--gray3);font-size:10px;font-weight:500;border:none;background:none;transition:color .15s;}
+.nav-btn.active{color:var(--green);}
+.nav-btn svg{width:22px;height:22px;}
+.top-bar{display:flex;align-items:center;padding:14px 20px 10px;gap:10px;flex-shrink:0;}
+.top-bar h1{font-family:var(--font-head);font-size:28px;letter-spacing:.5px;flex:1;color:var(--black);}
+.icon-btn{width:38px;height:38px;border-radius:50%;background:var(--gray);display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;color:var(--black);flex-shrink:0;}
+.back-btn{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--gray3);cursor:pointer;border:none;background:none;padding:0;}
+.home-hero{background:var(--green-dark);margin:0 16px 20px;border-radius:var(--radius);padding:20px;display:flex;align-items:center;gap:16px;position:relative;overflow:hidden;}
+.home-hero::before{content:'';position:absolute;right:-20px;top:-20px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.06);}
+.hero-title{font-family:var(--font-head);font-size:22px;color:var(--white);letter-spacing:.5px;}
+.hero-sub{font-size:12px;color:rgba(255,255,255,.65);margin-top:3px;}
+.section-label{font-size:11px;font-weight:600;color:var(--gray3);letter-spacing:.08em;padding:0 16px 10px;text-transform:uppercase;}
+.quick-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 16px 20px;}
+.quick-card{border:1.5px solid var(--gray2);border-radius:var(--radius);padding:16px;cursor:pointer;transition:all .15s;background:var(--white);}
+.quick-card:active{background:var(--green-bg);border-color:var(--green);}
+.qi{margin-bottom:8px;color:var(--green);}
+.ql{font-size:13px;font-weight:600;color:var(--black);}
+.qs{font-size:11px;color:var(--gray3);margin-top:2px;}
+.artist-row{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--gray2);cursor:pointer;}
+.avatar{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;flex-shrink:0;}
+.artist-name{font-size:14px;font-weight:600;color:var(--black);}
+.artist-style{font-size:12px;color:var(--gray3);}
+.pill-row{display:flex;gap:8px;padding:0 16px 14px;overflow-x:auto;}
+.pill-row::-webkit-scrollbar{display:none;}
+.pill{padding:7px 16px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;border:1.5px solid var(--gray2);color:var(--gray3);background:var(--white);transition:all .15s;}
+.pill.active{background:var(--green);color:var(--white);border-color:var(--green);}
+.photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;}
+.photo-cell{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:34px;cursor:pointer;position:relative;}
+.photo-cell.selected::after{content:'';position:absolute;inset:0;border:3px solid var(--green);pointer-events:none;}
+.photo-check{position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;color:white;font-size:11px;font-weight:700;}
+.compare-bar{display:flex;align-items:center;gap:8px;padding:10px 16px;background:var(--white);border-top:1px solid var(--gray2);flex-shrink:0;}
+.compare-bar span{font-size:13px;color:var(--gray3);flex:1;}
+.btn-sm{padding:8px 14px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;cursor:pointer;border:none;display:flex;align-items:center;gap:5px;}
+.btn-green{background:var(--green);color:var(--white);}
+.btn-green:disabled{opacity:.35;cursor:default;}
+.btn-outline{background:none;border:1.5px solid var(--gray2);color:var(--black);}
+.compare-grid{display:grid;gap:10px;padding:14px 14px 0;}
+.compare-grid.c2{grid-template-columns:1fr 1fr;}
+.compare-grid.c3{grid-template-columns:1fr 1fr 1fr;}
+.compare-card{border:1px solid var(--gray2);border-radius:var(--radius-sm);overflow:hidden;}
+.ci{aspect-ratio:1;display:flex;align-items:center;justify-content:center;}
+.cd{padding:8px 10px;background:var(--white);}
+.cn{font-size:12px;font-weight:600;}
+.cs{font-size:11px;color:var(--gray3);}
+.op-badge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:10px;font-weight:600;margin-bottom:3px;}
+.ba-andrea{background:#E8F5E9;color:#1B5E20;}.ba-bizio{background:#E3F2FD;color:#0D47A1;}.ba-chiaralu{background:#FCE4EC;color:#880E4F;}.ba-patty{background:#FFF3E0;color:#E65100;}
+.consult-info{background:var(--green-bg);margin:0 16px 16px;border-radius:var(--radius);padding:14px 16px;display:flex;gap:12px;align-items:flex-start;}
+.consult-info p{font-size:13px;color:var(--green-dark);line-height:1.5;}
+.cal-header{display:flex;justify-content:space-between;align-items:center;padding:0 16px 10px;}
+.cal-header span{font-size:15px;font-weight:600;}
+.cal-weekdays{display:grid;grid-template-columns:repeat(7,1fr);padding:0 16px;gap:2px;margin-bottom:4px;}
+.cal-wd{font-size:11px;color:var(--gray3);text-align:center;font-weight:500;}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);padding:0 16px;gap:4px;}
+.cal-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:13px;border-radius:50%;color:var(--gray3);}
+.cal-day.avail{color:var(--black);font-weight:600;cursor:pointer;}
+.cal-day.avail:hover{background:var(--green-bg);}
+.cal-day.sel{background:var(--green);color:var(--white);}
+.slots-label{font-size:11px;font-weight:600;color:var(--gray3);letter-spacing:.08em;text-transform:uppercase;padding:14px 16px 8px;}
+.slots-row{display:flex;flex-wrap:wrap;gap:8px;padding:0 16px 16px;}
+.slot-chip{padding:8px 16px;border:1.5px solid var(--gray2);border-radius:var(--radius-sm);font-size:13px;font-weight:500;cursor:pointer;color:var(--black);transition:all .15s;}
+.slot-chip.sel{background:var(--green);color:var(--white);border-color:var(--green);}
+.shop-card{margin:0 16px 12px;border:1.5px solid var(--gray2);border-radius:var(--radius);overflow:hidden;cursor:pointer;}
+.shop-img{height:90px;display:flex;align-items:center;justify-content:center;font-size:40px;}
+.shop-body{padding:12px 14px;}
+.shop-name{font-size:14px;font-weight:600;color:var(--black);}
+.shop-desc{font-size:12px;color:var(--gray3);margin-top:2px;}
+.shop-footer{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-top:1px solid var(--gray2);}
+.badge{font-size:10px;padding:3px 9px;border-radius:10px;font-weight:600;}
+.badge-green{background:var(--green-bg);color:var(--green-dark);}
+.service-item{display:flex;align-items:center;gap:14px;padding:13px 16px;border-bottom:1px solid var(--gray2);cursor:pointer;transition:background .12s;}
+.service-item.sel{background:var(--green-bg);}
+.service-icon{width:42px;height:42px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:20px;background:var(--gray);}
+.service-name{font-size:14px;font-weight:600;color:var(--black);flex:1;}
+.service-price{font-size:14px;font-weight:600;color:var(--green);}
+.gc-preview{margin:0 16px 16px;background:var(--green-dark);border-radius:var(--radius);padding:22px 20px;position:relative;overflow:hidden;}
+.gc-preview::before{content:'💀';font-size:80px;position:absolute;right:-10px;bottom:-10px;opacity:.12;}
+.gc-lbl{font-size:11px;color:rgba(255,255,255,.5);letter-spacing:.06em;text-transform:uppercase;}
+.gc-amt{font-family:var(--font-head);font-size:44px;color:var(--white);letter-spacing:1px;}
+.gc-code{font-size:12px;color:rgba(255,255,255,.5);font-family:monospace;margin-top:4px;}
+.gc-valid{font-size:11px;color:rgba(255,255,255,.4);margin-top:8px;}
+.amount-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;padding:0 16px 16px;}
+.amount-btn{padding:10px 0;border:1.5px solid var(--gray2);border-radius:var(--radius-sm);font-size:13px;font-weight:600;text-align:center;cursor:pointer;color:var(--black);transition:all .15s;}
+.amount-btn.sel{background:var(--green);color:var(--white);border-color:var(--green);}
+.pay-section{padding:0 16px 14px;}
+.pay-label{font-size:11px;font-weight:600;color:var(--gray3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;}
+.pay-row{display:flex;gap:10px;}
+.pay-btn{flex:1;padding:12px;border:1.5px solid var(--gray2);border-radius:var(--radius-sm);font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;color:var(--black);background:var(--white);transition:all .15s;}
+.pay-btn.sel{border-color:var(--green);border-width:2px;color:var(--green);}
+.btn-main{width:100%;padding:15px;background:var(--green);color:var(--white);border:none;border-radius:var(--radius);font-size:15px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;font-family:var(--font-body);}
+.btn-main:disabled{opacity:.4;cursor:default;}
+.btn-secondary{width:100%;padding:14px;background:none;color:var(--black);border:1.5px solid var(--gray2);border-radius:var(--radius);font-size:14px;font-weight:600;cursor:pointer;font-family:var(--font-body);}
+.btn-area{padding:0 16px 16px;display:flex;flex-direction:column;gap:8px;}
+.success-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;gap:14px;text-align:center;flex:1;}
+.success-icon{width:72px;height:72px;border-radius:50%;background:var(--green-bg);display:flex;align-items:center;justify-content:center;}
+.success-title{font-family:var(--font-head);font-size:28px;color:var(--black);letter-spacing:.5px;}
+.success-sub{font-size:14px;color:var(--gray3);line-height:1.6;}
+.success-card{background:var(--gray);border-radius:var(--radius);padding:16px;width:100%;text-align:left;}
+.sk{font-size:11px;color:var(--gray3);margin-bottom:3px;}
+.sv{font-size:16px;font-weight:600;color:var(--black);}
+.wizard-shell{flex:1;display:flex;flex-direction:column;background:var(--green-bg);}
+.wiz-progress{height:4px;background:var(--green-mid);flex-shrink:0;}
+.wiz-bar-inner{height:100%;background:var(--green);transition:width .4s ease;}
+.wiz-body{flex:1;display:flex;align-items:center;justify-content:center;padding:16px;overflow-y:auto;}
+.wizard-card{background:var(--white);border-radius:var(--radius);padding:24px;width:100%;max-width:340px;box-shadow:var(--shadow);}
+.wizard-card h2{font-size:20px;font-weight:700;color:var(--black);margin-bottom:6px;line-height:1.3;}
+.wcard-sub{font-size:13px;color:var(--gray3);margin-bottom:20px;}
+.wiz-footer{display:flex;border-top:1px solid var(--gray2);background:var(--white);flex-shrink:0;}
+.wiz-btn{flex:1;padding:16px;font-size:14px;font-weight:700;cursor:pointer;border:none;background:none;display:flex;align-items:center;justify-content:center;gap:6px;font-family:var(--font-body);}
+.wiz-btn.prev{color:var(--gray3);border-right:1px solid var(--gray2);}
+.wiz-btn.next{color:var(--white);background:var(--green);}
+.wiz-btn.next:disabled{opacity:.4;cursor:default;}
+.wiz-input{width:100%;padding:12px 14px;border:1.5px solid var(--gray2);border-radius:var(--radius-sm);font-size:14px;font-family:var(--font-body);color:var(--black);outline:none;transition:border-color .15s;}
+.wiz-input:focus{border-color:var(--green);}
+.wiz-textarea{width:100%;padding:12px 14px;border:1.5px solid var(--gray2);border-radius:var(--radius-sm);font-size:14px;font-family:var(--font-body);color:var(--black);outline:none;resize:none;height:100px;transition:border-color .15s;}
+.wiz-textarea:focus{border-color:var(--green);}
+.input-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.wiz-options{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+.wiz-options.cols2{grid-template-columns:1fr 1fr;}
+.wiz-option{border:1.5px solid var(--gray2);border-radius:var(--radius-sm);padding:10px 8px;font-size:12px;font-weight:600;text-align:center;cursor:pointer;color:var(--black);transition:all .15s;background:var(--white);}
+.wiz-option.sel{background:var(--green);color:var(--white);border-color:var(--green);}
+.drop-zone{border:2px dashed var(--green-mid);border-radius:var(--radius-sm);padding:20px;text-align:center;background:var(--green-bg);cursor:pointer;}
+.drop-zone span{font-size:13px;color:var(--gray3);}
+.intro-screen{flex:1;background:var(--green-bg);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;}
+.intro-screen .icard{background:var(--white);border-radius:var(--radius);padding:28px 24px;width:100%;text-align:center;box-shadow:var(--shadow);}
+.intro-skull{font-size:60px;margin-bottom:16px;}
+.intro-title{font-size:22px;font-weight:700;color:var(--black);line-height:1.3;margin-bottom:8px;}
+.intro-sub{font-size:13px;color:var(--gray3);margin-bottom:24px;line-height:1.5;}
+.form-lbl{font-size:11px;font-weight:600;color:var(--gray3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;display:block;}
+.form-group{margin-bottom:14px;}
+.divider{height:1px;background:var(--gray2);margin:8px 0;}
+</style>
+</head>
+<body>
+<div class="phone-shell">
+  <div class="status-bar">
+    <span style="font-weight:700;">9:41</span>
+    <div style="display:flex;gap:6px;align-items:center;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1.5 8.5a13 13 0 0 1 21 0M5 12a10 10 0 0 1 14 0M8.5 15.5a6 6 0 0 1 7 0M12 19h.01"/></svg>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="7" width="18" height="11" rx="2"/><path d="M22 11v3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </div>
+  </div>
+
+  <!-- ══ HOME ══ -->
+  <div class="screen active" id="s-home">
+    <div class="top-bar">
+      <h1>BABY SKULL</h1>
+      <button class="icon-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></button>
+    </div>
+    <div class="scroll-content">
+      <div class="home-hero">
+        <div style="font-size:40px;flex-shrink:0;">💀</div>
+        <div><div class="hero-title">STUDIO TATTOO</div><div class="hero-sub">Castel Gandolfo · Castelli Romani</div></div>
+      </div>
+      <div class="section-label">COSA VUOI FARE?</div>
+      <div class="quick-grid">
+        <div class="quick-card" onclick="gotoScreen('s-gallery')">
+          <div class="qi"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg></div>
+          <div class="ql">Galleria</div><div class="qs">Esplora i lavori</div>
+        </div>
+        <div class="quick-card" onclick="gotoScreen('s-booking')">
+          <div class="qi"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
+          <div class="ql">Prenota</div><div class="qs">Consulenza gratuita</div>
+        </div>
+        <div class="quick-card" onclick="gotoScreen('s-quote')">
+          <div class="qi"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+          <div class="ql">Preventivo</div><div class="qs">Richiedi un'offerta</div>
+        </div>
+        <div class="quick-card" onclick="gotoScreen('s-shop')">
+          <div class="qi"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18M16 10a4 4 0 0 1-8 0"/></svg></div>
+          <div class="ql">Shop</div><div class="qs">Piercing · Gift card</div>
+        </div>
+      </div>
+      <div class="section-label">I NOSTRI ARTISTI</div>
+      <div class="artist-row" onclick="openArtist('andrea')">
+        <div class="avatar" style="background:#E8F5E9;color:#1B5E20;">AC</div>
+        <div style="flex:1;"><div class="artist-name">Andrea Caso</div><div class="artist-style">Realistico</div></div>
+        <span style="font-size:12px;color:var(--gray3);margin-right:8px;">48 lavori</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+      </div>
+      <div class="artist-row" onclick="openArtist('bizio')">
+        <div class="avatar" style="background:#E3F2FD;color:#0D47A1;">BZ</div>
+        <div style="flex:1;"><div class="artist-name">Bizio</div><div class="artist-style">Anime · Cartoon · New School</div></div>
+        <span style="font-size:12px;color:var(--gray3);margin-right:8px;">35 lavori</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+      </div>
+      <div class="artist-row" onclick="openArtist('chiaralu')">
+        <div class="avatar" style="background:#FCE4EC;color:#880E4F;">CH</div>
+        <div style="flex:1;"><div class="artist-name">Chiaralu</div><div class="artist-style">Fineline · Blackwork</div></div>
+        <span style="font-size:12px;color:var(--gray3);margin-right:8px;">52 lavori</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+      </div>
+      <div class="artist-row" onclick="openArtist('patty')">
+        <div class="avatar" style="background:#FFF3E0;color:#E65100;">PT</div>
+        <div style="flex:1;"><div class="artist-name">Patty · PATTYPIERCER</div><div class="artist-style">Piercing · Tooth Gems · Microdermal</div></div>
+        <span style="font-size:12px;color:var(--gray3);margin-right:8px;">60 lavori</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+      </div>
+      <div style="height:16px;"></div>
+    </div>
+    <div class="bottom-nav">
+      <button class="nav-btn active" onclick="navTo('home')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Home</button>
+      <button class="nav-btn" onclick="navTo('gallery')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>Galleria</button>
+      <button class="nav-btn" onclick="navTo('booking')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Prenota</button>
+      <button class="nav-btn" onclick="navTo('shop')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18M16 10a4 4 0 0 1-8 0"/></svg>Shop</button>
+      <button class="nav-btn" onclick="navTo('quote')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Preventivo</button>
+    </div>
+  </div>
+
+  <!-- ══ GALLERY ══ -->
+  <div class="screen" id="s-gallery">
+    <div class="top-bar">
+      <h1>GALLERIA</h1>
+      <button class="icon-btn" id="btn-compare-open" style="display:none;" onclick="openCompare()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2E7D32" stroke-width="2"><rect x="3" y="3" width="7" height="18" rx="1"/><rect x="14" y="3" width="7" height="18" rx="1"/></svg>
+      </button>
+    </div>
+    <div class="pill-row" id="gallery-pills">
+      <div class="pill active" onclick="setGalleryOp('all',this)">Tutti</div>
+      <div class="pill" onclick="setGalleryOp('andrea',this)">Andrea Caso</div>
+      <div class="pill" onclick="setGalleryOp('bizio',this)">Bizio</div>
+      <div class="pill" onclick="setGalleryOp('chiaralu',this)">Chiaralu</div>
+      <div class="pill" onclick="setGalleryOp('patty',this)">Patty</div>
+    </div>
+    <div class="scroll-content"><div class="photo-grid" id="photo-grid"></div></div>
+    <div class="compare-bar">
+      <span id="sel-count">Seleziona foto per confrontarle</span>
+      <button class="btn-sm btn-outline" id="btn-clear-sel" style="display:none;" onclick="clearSel()">Annulla</button>
+      <button class="btn-sm btn-green" id="btn-do-compare" disabled onclick="openCompare()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="18" rx="1"/><rect x="14" y="3" width="7" height="18" rx="1"/></svg>Confronta
+      </button>
+    </div>
+    <div class="bottom-nav">
+      <button class="nav-btn" onclick="navTo('home')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Home</button>
+      <button class="nav-btn active" onclick="navTo('gallery')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>Galleria</button>
+      <button class="nav-btn" onclick="navTo('booking')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Prenota</button>
+      <button class="nav-btn" onclick="navTo('shop')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18M16 10a4 4 0 0 1-8 0"/></svg>Shop</button>
+      <button class="nav-btn" onclick="navTo('quote')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Preventivo</button>
+    </div>
+  </div>
+
+  <!-- ══ ARTIST ══ -->
+  <div class="screen" id="s-artist">
+    <div class="top-bar" style="padding-bottom:6px;">
+      <button class="back-btn" onclick="gotoScreen('s-gallery')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg> Galleria</button>
+    </div>
+    <div class="scroll-content">
+      <div style="padding:0 16px 16px;display:flex;align-items:center;gap:14px;">
+        <div class="avatar" id="artist-avatar" style="width:60px;height:60px;font-size:18px;"></div>
+        <div><div id="artist-name-h" style="font-size:18px;font-weight:700;"></div><div id="artist-style-h" style="font-size:13px;color:var(--gray3);margin-top:2px;"></div></div>
+      </div>
+      <div class="photo-grid" id="artist-photo-grid"></div>
+      <div class="btn-area" style="margin-top:16px;"><button class="btn-main" onclick="gotoScreen('s-booking')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Prenota consulenza</button></div>
+    </div>
+  </div>
+
+  <!-- ══ COMPARE ══ -->
+  <div class="screen" id="s-compare">
+    <div class="top-bar">
+      <button class="back-btn" onclick="gotoScreen('s-gallery')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg> Galleria</button>
+      <h1 style="font-size:22px;">CONFRONTO</h1>
+      <span id="compare-count" style="font-size:13px;color:var(--gray3);"></span>
+    </div>
+    <div class="scroll-content">
+      <div id="compare-grid-wrap" style="padding:8px 12px 16px;"></div>
+      <div class="btn-area">
+        <button class="btn-main" onclick="gotoScreen('s-quote')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Richiedi preventivo</button>
+        <button class="btn-secondary" onclick="gotoScreen('s-gallery')">Modifica selezione</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ BOOKING ══ -->
+  <div class="screen" id="s-booking">
+    <div class="top-bar"><h1>PRENOTA</h1></div>
+    <div class="scroll-content">
+      <div class="consult-info">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2E7D32" stroke-width="2" style="flex-shrink:0;margin-top:2px;"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        <p>La consulenza è <strong>gratuita</strong> e senza impegno. Verrai accolto dal nostro staff per definire insieme il tuo progetto.</p>
+      </div>
+      <div class="cal-header">
+        <button class="icon-btn" style="width:32px;height:32px;" onclick="prevMonth()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg></button>
+        <span id="cal-month-label"></span>
+        <button class="icon-btn" style="width:32px;height:32px;" onclick="nextMonth()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></button>
+      </div>
+      <div class="cal-weekdays"><div class="cal-wd">L</div><div class="cal-wd">M</div><div class="cal-wd">M</div><div class="cal-wd">G</div><div class="cal-wd">V</div><div class="cal-wd">S</div><div class="cal-wd">D</div></div>
+      <div class="cal-grid" id="cal-grid"></div>
+      <div class="slots-label" id="slots-label" style="display:none;">ORARI DISPONIBILI</div>
+      <div class="slots-row" id="slots-row"></div>
+      <div id="booking-confirm" style="display:none;padding:0 16px 16px;">
+        <button class="btn-main" onclick="confirmBooking()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Conferma consulenza</button>
+        <p style="text-align:center;font-size:11px;color:var(--gray3);margin-top:8px;">Gratuita · 30 minuti · Baby Skull, Castel Gandolfo</p>
+      </div>
+    </div>
+    <div class="bottom-nav">
+      <button class="nav-btn" onclick="navTo('home')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Home</button>
+      <button class="nav-btn" onclick="navTo('gallery')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>Galleria</button>
+      <button class="nav-btn active" onclick="navTo('booking')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Prenota</button>
+      <button class="nav-btn" onclick="navTo('shop')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18M16 10a4 4 0 0 1-8 0"/></svg>Shop</button>
+      <button class="nav-btn" onclick="navTo('quote')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Preventivo</button>
+    </div>
+  </div>
+
+  <!-- ══ BOOKING OK ══ -->
+  <div class="screen" id="s-booking-ok">
+    <div class="success-wrap">
+      <div class="success-icon"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#2E7D32" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+      <div class="success-title">PRENOTATO!</div>
+      <div class="success-sub">La tua consulenza gratuita è confermata.<br>Riceverai un SMS di promemoria.</div>
+      <div class="success-card">
+        <div class="sk">Data</div><div class="sv" id="booking-ok-date">—</div>
+        <div style="height:10px;"></div>
+        <div class="sk">Orario</div><div class="sv" id="booking-ok-time">—</div>
+        <div style="height:10px;"></div>
+        <div class="sk">Sede</div><div class="sv">Baby Skull · Castel Gandolfo</div>
+      </div>
+      <button class="btn-main" style="width:100%;margin-top:8px;" onclick="navTo('home')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Torna alla home</button>
+    </div>
+  </div>
+
+  <!-- ══ SHOP ══ -->
+  <div class="screen" id="s-shop">
+    <div class="top-bar"><h1>SHOP</h1></div>
+    <div class="scroll-content">
+      <div class="section-label">PIERCING</div>
+      <div class="shop-card" onclick="gotoScreen('s-piercing')">
+        <div class="shop-img" style="background:#F3E5F5;">💎</div>
+        <div class="shop-body"><div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;"><div class="shop-name">Piercing & Microdermal</div><div class="badge badge-green">Bestseller</div></div><div class="shop-desc">A partire da €20 · include gioiello in titanio certificato</div></div>
+        <div class="shop-footer"><span style="font-size:12px;color:var(--gray3);">Con Patty · PATTYPIERCER</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9e9e9e" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+      </div>
+      <div class="shop-card" onclick="gotoScreen('s-piercing')">
+        <div class="shop-img" style="background:#FFFDE7;">✨</div>
+        <div class="shop-body"><div class="shop-name" style="margin-bottom:4px;">Tooth Gems</div><div class="shop-desc">A partire da €30 · cristallo, zircone o oro</div></div>
+        <div class="shop-footer"><span style="font-size:12px;color:var(--gray3);">Senza danni allo smalto</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9e9e9e" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+      </div>
+      <div class="divider" style="margin:4px 0 12px;"></div>
+      <div class="section-label">GIFT CARD DIGITALE</div>
+      <div class="shop-card" onclick="gotoScreen('s-giftcard')">
+        <div class="shop-img" style="background:var(--green-dark);">🎁</div>
+        <div class="shop-body"><div class="shop-name" style="margin-bottom:4px;">Gift Card Baby Skull</div><div class="shop-desc">Da €25 a €200 · consegna immediata via email</div></div>
+        <div class="shop-footer"><span style="font-size:12px;color:var(--gray3);">Valida 12 mesi · tutti i servizi</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9e9e9e" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+      </div>
+      <div style="height:16px;"></div>
+    </div>
+    <div class="bottom-nav">
+      <button class="nav-btn" onclick="navTo('home')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Home</button>
+      <button class="nav-btn" onclick="navTo('gallery')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>Galleria</button>
+      <button class="nav-btn" onclick="navTo('booking')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Prenota</button>
+      <button class="nav-btn active" onclick="navTo('shop')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18M16 10a4 4 0 0 1-8 0"/></svg>Shop</button>
+      <button class="nav-btn" onclick="navTo('quote')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Preventivo</button>
+    </div>
+  </div>
+
+  <!-- ══ PIERCING ══ -->
+  <div class="screen" id="s-piercing">
+    <div class="top-bar" style="padding-bottom:6px;">
+      <button class="back-btn" onclick="gotoScreen('s-shop')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg> Shop</button>
+      <h1 style="font-size:22px;">PIERCING</h1>
+    </div>
+    <div class="scroll-content">
+      <div class="section-label">SCEGLI IL TIPO</div>
+      <div class="service-item" id="svc-labbro" onclick="selectSvc('labbro','€25')"><div class="service-icon">💋</div><div class="service-name">Labbro</div><div class="service-price">€25</div><svg id="chk-labbro" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2E7D32" stroke-width="2.5" style="display:none;margin-left:8px;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+      <div class="service-item" id="svc-sopracciglio" onclick="selectSvc('sopracciglio','€25')"><div class="service-icon">👁</div><div class="service-name">Sopracciglio</div><div class="service-price">€25</div><svg id="chk-sopracciglio" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2E7D32" stroke-width="2.5" style="display:none;margin-left:8px;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+      <div class="service-item" id="svc-lobo" onclick="selectSvc('lobo','€20')"><div class="service-icon">👂</div><div class="service-name">Orecchio (lobo)</div><div class="service-price">€20</div><svg id="chk-lobo" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2E7D32" stroke-width="2.5" style="display:none;margin-left:8px;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+      <div class="service-item" id="svc-cartilagine" onclick="selectSvc('cartilagine','€35')"><div class="service-icon">✨</div><div class="service-name">Cartilagine</div><div class="service-price">€35</div><svg id="chk-cartilagine" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2E7D32" stroke-width="2.5" style="display:none;margin-left:8px;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+      <div class="service-item" id="svc-naso" onclick="selectSvc('naso','€30')"><div class="service-icon">💎</div><div class="service-name">Naso</div><div class="service-price">€30</div><svg id="chk-naso" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2E7D32" stroke-width="2.5" style="display:none;margin-left:8px;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+      <div class="service-item" id="svc-setto" onclick="selectSvc('setto','€45')"><div class="service-icon">🔮</div><div class="service-name">Setto / Industriale</div><div class="service-price">€45</div><svg id="chk-setto" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2E7D32" stroke-width="2.5" style="display:none;margin-left:8px;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+      <div id="piercing-payment" style="display:none;">
+        <div class="pay-section" style="margin-top:6px;"><div class="pay-label">METODO DI PAGAMENTO</div>
+          <div class="pay-row">
+            <button class="pay-btn sel" id="pay-card" onclick="selectPay('card')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg>Carta</button>
+            <button class="pay-btn" id="pay-paypal" onclick="selectPay('paypal')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 11C7 11 6 17 10 17H15C17 17 18 15 18 13C18 11 17 9 15 9H9C7 9 7 11 7 11Z"/><path d="M5 7C5 7 4 13 8 13H13C15 13 16 11 16 9C16 7 15 5 13 5H7C5 5 5 7 5 7Z"/></svg>PayPal</button>
+          </div>
+        </div>
+        <div class="btn-area"><button class="btn-main" id="piercing-pay-btn" onclick="gotoScreen('s-shop-ok')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Paga e prenota</button></div>
+      </div>
+      <div style="height:16px;"></div>
+    </div>
+  </div>
+
+  <!-- ══ GIFT CARD ══ -->
+  <div class="screen" id="s-giftcard">
+    <div class="top-bar" style="padding-bottom:6px;">
+      <button class="back-btn" onclick="gotoScreen('s-shop')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg> Shop</button>
+      <h1 style="font-size:22px;">GIFT CARD</h1>
+    </div>
+    <div class="scroll-content">
+      <div class="gc-preview">
+        <div class="gc-lbl">BABY SKULL TATTOO</div>
+        <div class="gc-amt" id="gc-amount-display">€50</div>
+        <div class="gc-code">BSK-XXXX-XXXX</div>
+        <div class="gc-valid">Valida 12 mesi · tutti i servizi</div>
+      </div>
+      <div class="section-label">IMPORTO</div>
+      <div class="amount-grid">
+        <div class="amount-btn" onclick="setGcAmt('25',this)">€25</div>
+        <div class="amount-btn sel" onclick="setGcAmt('50',this)">€50</div>
+        <div class="amount-btn" onclick="setGcAmt('100',this)">€100</div>
+        <div class="amount-btn" onclick="setGcAmt('150',this)">€150</div>
+        <div class="amount-btn" onclick="setGcAmt('200',this)">€200</div>
+      </div>
+      <div style="padding:0 16px 14px;">
+        <div class="form-group"><label class="form-lbl">DESTINATARIO</label><input class="wiz-input" placeholder="Nome destinatario" style="margin-bottom:8px;"/><input class="wiz-input" placeholder="Email destinatario" type="email"/></div>
+        <div class="pay-label">METODO DI PAGAMENTO</div>
+        <div class="pay-row" style="margin-bottom:14px;">
+          <button class="pay-btn sel" id="gc-pay-card" onclick="selectGcPay('card')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg>Carta</button>
+          <button class="pay-btn" id="gc-pay-paypal" onclick="selectGcPay('paypal')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 11C7 11 6 17 10 17H15C17 17 18 15 18 13C18 11 17 9 15 9H9C7 9 7 11 7 11Z"/><path d="M5 7C5 7 4 13 8 13H13C15 13 16 11 16 9C16 7 15 5 13 5H7C5 5 5 7 5 7Z"/></svg>PayPal</button>
+        </div>
+        <button class="btn-main" id="gc-pay-btn" onclick="gotoScreen('s-shop-ok')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Acquista gift card · €50</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SHOP OK ══ -->
+  <div class="screen" id="s-shop-ok">
+    <div class="success-wrap">
+      <div class="success-icon"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#2E7D32" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+      <div class="success-title">PAGATO!</div>
+      <div class="success-sub">Pagamento completato con successo.<br>Riceverai una conferma via email.</div>
+      <div class="success-card"><div class="sk">Codice</div><div class="sv" style="font-family:monospace;">BSK-A3F2-9BK1</div><div style="height:10px;"></div><div class="sk">Studio</div><div class="sv">Baby Skull · Castel Gandolfo</div></div>
+      <button class="btn-main" style="width:100%;margin-top:8px;" onclick="navTo('home')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Torna alla home</button>
+    </div>
+  </div>
+
+  <!-- ══ PREVENTIVO WIZARD ══ -->
+  <div class="screen" id="s-quote">
+    <div id="wiz-intro" class="intro-screen">
+      <div class="icard">
+        <div class="intro-skull">💀</div>
+        <div class="intro-title">Pronto per il tuo nuovo tatuaggio?</div>
+        <div class="intro-sub">Ti faccio qualche domanda per capire appieno la tua idea e inviarti il preventivo più preciso possibile!</div>
+        <button class="btn-main" onclick="startWizard()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>INIZIAMO!</button>
+      </div>
+    </div>
+    <div id="wiz-shell" class="wizard-shell" style="display:none;">
+      <div class="wiz-progress"><div class="wiz-bar-inner" id="wiz-bar" style="width:0%;"></div></div>
+      <div class="wiz-body" id="wiz-body"></div>
+      <div class="wiz-footer">
+        <button class="wiz-btn prev" id="wiz-prev" onclick="wizPrev()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>PRECEDENTE</button>
+        <button class="wiz-btn next" id="wiz-next" onclick="wizNext()">AVANTI<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></button>
+      </div>
+    </div>
+    <div id="wiz-success" style="display:none;flex:1;flex-direction:column;">
+      <div class="success-wrap">
+        <div class="success-icon"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#2E7D32" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+        <div class="success-title">INVIATO!</div>
+        <div class="success-sub">Ti risponderemo entro 48 ore<br>al contatto che hai fornito.</div>
+        <button class="btn-main" style="width:100%;margin-top:8px;" onclick="resetWizard()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Torna alla home</button>
+      </div>
+    </div>
+    <div class="bottom-nav" id="quote-nav">
+      <button class="nav-btn" onclick="navTo('home')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Home</button>
+      <button class="nav-btn" onclick="navTo('gallery')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>Galleria</button>
+      <button class="nav-btn" onclick="navTo('booking')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Prenota</button>
+      <button class="nav-btn" onclick="navTo('shop')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18M16 10a4 4 0 0 1-8 0"/></svg>Shop</button>
+      <button class="nav-btn active" onclick="navTo('quote')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Preventivo</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const artists={
+  andrea:{name:'Andrea Caso',style:'Realistico',initials:'AC',bg:'#E8F5E9',tc:'#1B5E20',photos:[{e:'🦁',s:'Realistico'},{e:'🐯',s:'Realistico'},{e:'🌹',s:'Realistico'},{e:'👁️',s:'Realistico'},{e:'🦅',s:'Realistico'},{e:'🐺',s:'Realistico'}]},
+  bizio:{name:'Bizio',style:'Anime · Cartoon · New School',initials:'BZ',bg:'#E3F2FD',tc:'#0D47A1',photos:[{e:'🐉',s:'Anime'},{e:'⚡',s:'New School'},{e:'🌀',s:'Cartoon'},{e:'🔥',s:'New School'},{e:'🌙',s:'Anime'},{e:'🎮',s:'Cartoon'}]},
+  chiaralu:{name:'Chiaralu',style:'Fineline · Blackwork',initials:'CH',bg:'#FCE4EC',tc:'#880E4F',photos:[{e:'🌸',s:'Fineline'},{e:'🦋',s:'Fineline'},{e:'🕷',s:'Blackwork'},{e:'🌿',s:'Fineline'},{e:'🌺',s:'Fineline'},{e:'🐍',s:'Blackwork'}]},
+  patty:{name:'Patty · PATTYPIERCER',style:'Piercing · Tooth Gems · Microdermal',initials:'PT',bg:'#FFF3E0',tc:'#E65100',photos:[{e:'💎',s:'Piercing'},{e:'✨',s:'Tooth Gem'},{e:'🔮',s:'Microdermal'},{e:'💍',s:'Piercing'},{e:'⭐',s:'Tooth Gem'},{e:'🌟',s:'Piercing'}]},
+};
+const opBg={andrea:'#E8F5E9',bizio:'#E3F2FD',chiaralu:'#FCE4EC',patty:'#FFF3E0'};
+const allPhotos=[...artists.andrea.photos.map(p=>({...p,op:'andrea'})),...artists.bizio.photos.map(p=>({...p,op:'bizio'})),...artists.chiaralu.photos.map(p=>({...p,op:'chiaralu'})),...artists.patty.photos.map(p=>({...p,op:'patty'}))];
+
+function gotoScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
+function navTo(tab){const map={home:'s-home',gallery:'s-gallery',booking:'s-booking',shop:'s-shop',quote:'s-quote'};gotoScreen(map[tab]);}
+
+// GALLERY
+let currentOp='all',selPhotos=new Set();
+function renderGallery(){
+  const photos=currentOp==='all'?allPhotos:allPhotos.filter(p=>p.op===currentOp);
+  document.getElementById('photo-grid').innerHTML=photos.map((p,i)=>{
+    const key=p.op+i;const sel=selPhotos.has(key);
+    return`<div class="photo-cell${sel?' selected':''}" style="background:${opBg[p.op]};" onclick="togglePhoto('${key}')"><span>${p.e}</span>${sel?'<div class="photo-check">✓</div>':''}</div>`;
+  }).join('');
+  const n=selPhotos.size;
+  document.getElementById('sel-count').textContent=n===0?'Seleziona foto per confrontarle':`${n} foto selezionat${n===1?'a':'e'}`;
+  document.getElementById('btn-do-compare').disabled=n<2;
+  document.getElementById('btn-clear-sel').style.display=n>0?'flex':'none';
+  document.getElementById('btn-compare-open').style.display=n>=2?'flex':'none';
+}
+function setGalleryOp(op,el){currentOp=op;document.querySelectorAll('#gallery-pills .pill').forEach(p=>p.classList.remove('active'));el.classList.add('active');renderGallery();}
+function togglePhoto(key){if(selPhotos.has(key)){selPhotos.delete(key);}else if(selPhotos.size<3){selPhotos.add(key);}renderGallery();}
+function clearSel(){selPhotos.clear();renderGallery();}
+function openCompare(){
+  const photos=currentOp==='all'?allPhotos:allPhotos.filter(p=>p.op===currentOp);
+  const keys=[...selPhotos];
+  const toShow=keys.length>=2?keys.slice(0,3).map((k,i)=>{const idx=parseInt(k.replace(/\D/g,''));return photos[idx%photos.length]||allPhotos[i];}):allPhotos.slice(0,2);
+  const n=toShow.length;
+  document.getElementById('compare-count').textContent=n+' foto';
+  document.getElementById('compare-grid-wrap').innerHTML=`<div class="compare-grid c${n}">${toShow.map(p=>{const ar=artists[p.op||'andrea'];return`<div class="compare-card"><div class="ci" style="background:${opBg[p.op||'andrea']};font-size:${n===3?'28':'36'}px;">${p.e}</div><div class="cd"><div class="op-badge ba-${p.op||'andrea'}">${ar.initials}</div><div class="cn">${p.s}</div><div class="cs">${ar.name}</div></div></div>`;}).join('')}</div>`;
+  gotoScreen('s-compare');
+}
+function openArtist(op){
+  const ar=artists[op];
+  const av=document.getElementById('artist-avatar');
+  av.style.background=ar.bg;av.style.color=ar.tc;av.textContent=ar.initials;
+  document.getElementById('artist-name-h').textContent=ar.name;
+  document.getElementById('artist-style-h').textContent=ar.style;
+  document.getElementById('artist-photo-grid').innerHTML=ar.photos.map(p=>`<div class="photo-cell" style="background:${ar.bg};"><span>${p.e}</span></div>`).join('');
+  gotoScreen('s-artist');
+}
+renderGallery();
+
+// BOOKING
+const months=['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'];
+let calYear=2025,calMonth=4,calDay=null,calSlot=null;
+const availDays=[3,5,8,10,12,15,17,19,22,24,26,29];
+const slots=['10:00','11:30','14:00','15:30','17:00'];
+function renderCal(){
+  document.getElementById('cal-month-label').textContent=months[calMonth]+' '+calYear;
+  const firstDay=new Date(calYear,calMonth,1).getDay();
+  const start=(firstDay+6)%7;
+  const daysInMonth=new Date(calYear,calMonth+1,0).getDate();
+  let html='';
+  for(let i=0;i<start;i++)html+='<div></div>';
+  for(let d=1;d<=daysInMonth;d++){const av=availDays.includes(d);const sel=calDay===d;html+=`<div class="cal-day${av?' avail':''}${sel?' sel':''}"${av?` onclick="selectDay(${d})"`:''}>${d}</div>`;}
+  document.getElementById('cal-grid').innerHTML=html;
+  document.getElementById('slots-label').style.display=calDay?'block':'none';
+  document.getElementById('slots-row').innerHTML=calDay?slots.map(t=>`<div class="slot-chip${calSlot===t?' sel':''}" onclick="selectSlot('${t}')">${t}</div>`).join(''):'';
+  document.getElementById('booking-confirm').style.display=(calDay&&calSlot)?'block':'none';
+}
+function prevMonth(){calMonth--;if(calMonth<0){calMonth=11;calYear--;}calDay=null;calSlot=null;renderCal();}
+function nextMonth(){calMonth++;if(calMonth>11){calMonth=0;calYear++;}calDay=null;calSlot=null;renderCal();}
+function selectDay(d){calDay=d;calSlot=null;renderCal();}
+function selectSlot(t){calSlot=t;renderCal();}
+function confirmBooking(){document.getElementById('booking-ok-date').textContent=calDay+' '+months[calMonth]+' '+calYear;document.getElementById('booking-ok-time').textContent=calSlot;gotoScreen('s-booking-ok');}
+renderCal();
+
+// SHOP
+function selectSvc(svc,price){
+  ['labbro','sopracciglio','lobo','cartilagine','naso','setto'].forEach(s=>{document.getElementById('svc-'+s).classList.remove('sel');document.getElementById('chk-'+s).style.display='none';});
+  document.getElementById('svc-'+svc).classList.add('sel');document.getElementById('chk-'+svc).style.display='inline-block';
+  document.getElementById('piercing-payment').style.display='block';
+  document.getElementById('piercing-pay-btn').innerHTML=`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Paga e prenota · ${price}`;
+}
+function selectPay(m){document.getElementById('pay-card').classList.toggle('sel',m==='card');document.getElementById('pay-paypal').classList.toggle('sel',m==='paypal');}
+function selectGcPay(m){document.getElementById('gc-pay-card').classList.toggle('sel',m==='card');document.getElementById('gc-pay-paypal').classList.toggle('sel',m==='paypal');}
+function setGcAmt(a,el){document.querySelectorAll('.amount-btn').forEach(b=>b.classList.remove('sel'));el.classList.add('sel');document.getElementById('gc-amount-display').textContent='€'+a;document.getElementById('gc-pay-btn').innerHTML=`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Acquista gift card · €${a}`;}
+
+// WIZARD
+const wSteps=[
+  {id:'name',render:()=>`<h2>Come ti chiami?</h2><div class="wcard-sub">E quanti anni hai?</div><div class="input-row"><input class="wiz-input" id="w-name" placeholder="Nome" oninput="wCheck()"/><input class="wiz-input" id="w-age" placeholder="Età" type="number" min="18" oninput="wCheck()"/></div>`,valid:()=>!!document.getElementById('w-name')?.value.trim()},
+  {id:'idea',render:()=>`<h2>Cosa vorresti tatuarti?</h2><div class="wcard-sub">Descrivimi la tua idea!</div><textarea class="wiz-textarea" id="w-idea" placeholder="Es. Una rosa realistica con spine e foglie..." oninput="wCheck()"></textarea>`,valid:()=>!!document.getElementById('w-idea')?.value.trim()},
+  {id:'zona',render:()=>`<h2>In quale zona del corpo?</h2><div class="wcard-sub">Dove vorresti farlo?</div><div class="wiz-options" id="zona-opts">${['Braccia','Gambe','Schiena','Petto','Costato','Piede','Collo','Mano','Pancia'].map(z=>`<div class="wiz-option" onclick="selOpt(this,'zona-opts')">${z}</div>`).join('')}</div>`,valid:()=>!!document.querySelector('#zona-opts .wiz-option.sel')},
+  {id:'size',render:()=>`<h2>Quanto lo vorresti grande?</h2><div class="wcard-sub">Indicativamente</div><div class="wiz-options" id="size-opts">${['Piccolo (3-5cm)','Medio-Piccolo (6-12cm)','Medio (13-16cm)','Medio-Grande (17-22cm)','Grande (23-29cm)','ENORME! (>30cm)'].map(s=>`<div class="wiz-option" onclick="selOpt(this,'size-opts')">${s}</div>`).join('')}</div>`,valid:()=>!!document.querySelector('#size-opts .wiz-option.sel')},
+  {id:'color',render:()=>`<h2>Come lo immaginavi?</h2><div class="wcard-sub">Colori o bianco e nero?</div><div class="wiz-options cols2" id="color-opts"><div class="wiz-option" style="padding:20px 8px;" onclick="selOpt(this,'color-opts')">🎨<br><b>COLORI</b></div><div class="wiz-option" style="padding:20px 8px;" onclick="selOpt(this,'color-opts')">⬛<br><b>BIANCO E NERO</b></div></div>`,valid:()=>!!document.querySelector('#color-opts .wiz-option.sel')},
+  {id:'ref',render:()=>`<h2>Hai immagini di riferimento?</h2><div class="wcard-sub">Se sì, caricale qui sotto!</div><div class="drop-zone"><div style="font-size:32px;margin-bottom:8px;">☁️</div><span>Trascina i file qui<br><small>Max 10MB per file</small></span></div>`,valid:()=>true},
+  {id:'budget',render:()=>`<h2>Hai un budget in mente?</h2><div class="wcard-sub">Se sì, scrivilo qui sotto</div><input class="wiz-input" id="w-budget" placeholder="Es. €200"/>`,valid:()=>true},
+  {id:'contact',render:()=>`<h2>Abbiamo quasi finito!</h2><div class="wcard-sub">Lasciami il tuo contatto Instagram o il numero così ti ricontatterò con il preventivo!</div><div class="input-row"><input class="wiz-input" id="w-ig" placeholder="@NomeInstagram" oninput="wCheck()"/><input class="wiz-input" id="w-tel" placeholder="Telefono" type="tel" oninput="wCheck()"/></div>`,valid:()=>{const ig=document.getElementById('w-ig')?.value.trim();const tel=document.getElementById('w-tel')?.value.trim();return!!(ig||tel);}},
+];
+let wStep=0;
+function startWizard(){document.getElementById('wiz-intro').style.display='none';document.getElementById('wiz-shell').style.display='flex';document.getElementById('quote-nav').style.display='none';wStep=0;renderWiz();}
+function renderWiz(){
+  document.getElementById('wiz-body').innerHTML=`<div class="wizard-card">${wSteps[wStep].render()}</div>`;
+  document.getElementById('wiz-bar').style.width=((wStep+1)/wSteps.length*100).toFixed(0)+'%';
+  document.getElementById('wiz-prev').style.visibility=wStep===0?'hidden':'visible';
+  const isLast=wStep===wSteps.length-1;
+  document.getElementById('wiz-next').innerHTML=isLast?'INVIA <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>':'AVANTI <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>';
+  wCheck();
+}
+function wCheck(){document.getElementById('wiz-next').disabled=!wSteps[wStep].valid();}
+function wizNext(){if(!wSteps[wStep].valid())return;if(wStep===wSteps.length-1){submitWiz();return;}wStep++;renderWiz();}
+function wizPrev(){if(wStep>0){wStep--;renderWiz();}}
+function selOpt(el,gid){document.querySelectorAll('#'+gid+' .wiz-option').forEach(o=>o.classList.remove('sel'));el.classList.add('sel');wCheck();}
+function submitWiz(){document.getElementById('wiz-shell').style.display='none';const s=document.getElementById('wiz-success');s.style.display='flex';s.style.flexDirection='column';}
+function resetWizard(){document.getElementById('wiz-success').style.display='none';document.getElementById('wiz-intro').style.display='flex';document.getElementById('quote-nav').style.display='flex';wStep=0;navTo('home');}
+</script>
+</body>
+</html>
