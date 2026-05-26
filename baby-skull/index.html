@@ -453,6 +453,13 @@ svg.ic{display:inline-block;vertical-align:middle;flex-shrink:0;}
       </div>
     </div>
     <div id="wiz-shell" class="wizard-shell" style="display:none;">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 16px 6px;background:var(--white);flex-shrink:0;border-bottom:1px solid var(--gray2);">
+        <span id="wiz-step-label" style="font-size:12px;font-weight:600;color:var(--gray3);letter-spacing:.06em;"></span>
+        <button onclick="exitWizard()" style="background:none;border:none;cursor:pointer;padding:4px;display:flex;align-items:center;gap:6px;color:var(--gray3);font-size:13px;font-weight:500;">
+          Annulla
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></svg>
+        </button>
+      </div>
       <div class="wiz-progress"><div class="wiz-bar-inner" id="wiz-bar" style="width:0%;"></div></div>
       <div class="wiz-body" id="wiz-body"></div>
       <div class="wiz-footer">
@@ -489,7 +496,7 @@ const opBg={andrea:'#E8F5E9',bizio:'#E3F2FD',chiaralu:'#FCE4EC',patty:'#FFF3E0'}
 const allPhotos=[...artists.andrea.photos.map(p=>({...p,op:'andrea'})),...artists.bizio.photos.map(p=>({...p,op:'bizio'})),...artists.chiaralu.photos.map(p=>({...p,op:'chiaralu'})),...artists.patty.photos.map(p=>({...p,op:'patty'}))];
 
 function gotoScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
-function navTo(tab){const map={home:'s-home',gallery:'s-gallery',booking:'s-booking',shop:'s-shop',quote:'s-quote'};gotoScreen(map[tab]);}
+function navTo(tab){const map={home:'s-home',gallery:'s-gallery',booking:'s-booking',shop:'s-shop',quote:'s-quote'};gotoScreen(map[tab]);if(tab==='quote'){showWizPart('intro');}}
 
 // GALLERY
 let currentOp='all',selPhotos=new Set();
@@ -576,10 +583,21 @@ const wSteps=[
   {id:'contact',render:()=>`<h2>Abbiamo quasi finito!</h2><div class="wcard-sub">Lasciami il tuo contatto Instagram o il numero così ti ricontatterò con il preventivo!</div><div class="input-row"><input class="wiz-input" id="w-ig" placeholder="@NomeInstagram" oninput="wCheck()"/><input class="wiz-input" id="w-tel" placeholder="Telefono" type="tel" oninput="wCheck()"/></div>`,valid:()=>{const ig=document.getElementById('w-ig')?.value.trim();const tel=document.getElementById('w-tel')?.value.trim();return!!(ig||tel);}},
 ];
 let wStep=0;
-function startWizard(){document.getElementById('wiz-intro').style.display='none';document.getElementById('wiz-shell').style.display='flex';document.getElementById('quote-nav').style.display='none';wStep=0;renderWiz();}
+function showWizPart(part){
+  document.getElementById('wiz-intro').style.display='none';
+  document.getElementById('wiz-shell').style.display='none';
+  document.getElementById('wiz-success').style.display='none';
+  document.getElementById('quote-nav').style.display='none';
+  if(part==='intro'){document.getElementById('wiz-intro').style.display='flex';document.getElementById('quote-nav').style.display='flex';}
+  else if(part==='shell'){document.getElementById('wiz-shell').style.display='flex';}
+  else if(part==='success'){document.getElementById('wiz-success').style.display='flex';document.getElementById('wiz-success').style.flexDirection='column';}
+}
+function startWizard(){wStep=0;showWizPart('shell');renderWiz();}
+function exitWizard(){resetWizard();}
 function renderWiz(){
   document.getElementById('wiz-body').innerHTML=`<div class="wizard-card">${wSteps[wStep].render()}</div>`;
   document.getElementById('wiz-bar').style.width=((wStep+1)/wSteps.length*100).toFixed(0)+'%';
+  document.getElementById('wiz-step-label').textContent=`STEP ${wStep+1} DI ${wSteps.length}`;
   document.getElementById('wiz-prev').style.visibility=wStep===0?'hidden':'visible';
   const isLast=wStep===wSteps.length-1;
   document.getElementById('wiz-next').innerHTML=isLast?'INVIA <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>':'AVANTI <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>';
@@ -589,8 +607,8 @@ function wCheck(){document.getElementById('wiz-next').disabled=!wSteps[wStep].va
 function wizNext(){if(!wSteps[wStep].valid())return;if(wStep===wSteps.length-1){submitWiz();return;}wStep++;renderWiz();}
 function wizPrev(){if(wStep>0){wStep--;renderWiz();}}
 function selOpt(el,gid){document.querySelectorAll('#'+gid+' .wiz-option').forEach(o=>o.classList.remove('sel'));el.classList.add('sel');wCheck();}
-function submitWiz(){document.getElementById('wiz-shell').style.display='none';const s=document.getElementById('wiz-success');s.style.display='flex';s.style.flexDirection='column';}
-function resetWizard(){document.getElementById('wiz-success').style.display='none';document.getElementById('wiz-intro').style.display='flex';document.getElementById('quote-nav').style.display='flex';wStep=0;navTo('home');}
+function submitWiz(){showWizPart('success');}
+function resetWizard(){showWizPart('intro');wStep=0;navTo('home');}
 </script>
 </body>
 </html>
