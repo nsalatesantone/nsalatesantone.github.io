@@ -32,7 +32,7 @@
   ],
 
   "galleryWorks": [
-    { "id": "gw-andrea-1", "artistId": "andrea", "title": "Leone realistico", "imageUrl": "assets/mock/images/044a36_06401416037c4fcca8e0defdf5f34ea3mv2.jpg", "createdAt": "2026-07-13T10:00:00Z" },
+    { "id": "gw-andrea-1", "artistId": "andrea", "title": "Scimmia realistica", "imageUrl": "assets/mock/images/468410487_18338651683145512_5859791475533565628_n.jpg", "createdAt": "2026-07-13T10:00:00Z" },
     { "id": "gw-andrea-2", "artistId": "andrea", "title": "Ritratto braccio", "imageUrl": "assets/mock/images/468431765_18339123544145512_1118268265191687081_n.jpg", "createdAt": "2026-07-08T10:00:00Z" },
     { "id": "gw-andrea-3", "artistId": "andrea", "title": "Aquila petto", "imageUrl": "assets/mock/images/467176223_18338057614145512_7371018193272859372_n.jpg", "createdAt": "2026-06-29T10:00:00Z" },
     { "id": "gw-andrea-4", "artistId": "andrea", "title": "Lupo avambraccio", "imageUrl": "assets/mock/images/467631017_18338057623145512_5618483136189675318_n.jpg", "createdAt": "2026-06-20T10:00:00Z" },
