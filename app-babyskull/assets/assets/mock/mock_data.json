@@ -1,0 +1,116 @@
+{
+  "_readme": "Dati finti usati SOLO in debug quando Firebase non è configurato (vedi lib/core/env.dart e lib/core/services/mock_data_service.dart). Modifica liberamente questo file per testare scenari diversi: aggiungi/rimuovi artisti, lavori, prodotti. Artisti e lavori usano foto reali dello studio in assets/mock/images/ (nessuna connessione richiesta); i prodotti shop usano ancora placeholder Lorem Picsum.",
+
+  "artists": [
+    {
+      "id": "andrea",
+      "name": "Andrea Caso",
+      "role": "Tatuatore · Realistico",
+      "avatarUrl": "assets/mock/images/artisti/caso.jpg",
+      "acceptsSessions": true
+    },
+    {
+      "id": "bizio",
+      "name": "Bizio",
+      "role": "Tatuatore · Anime · New School",
+      "avatarUrl": "assets/mock/images/artisti/bizio.jpg",
+      "acceptsSessions": true
+    },
+    {
+      "id": "chiaralu",
+      "name": "Chiaralu",
+      "role": "Tatuatrice · Fineline · Blackwork",
+      "avatarUrl": "assets/mock/images/artisti/chiaralu.jpg",
+      "acceptsSessions": true
+    },
+    {
+      "id": "patty",
+      "name": "Patty · PATTYPIERCER",
+      "role": "Piercer · Tooth Gems · Microdermal",
+      "acceptsSessions": false
+    }
+  ],
+
+  "galleryWorks": [
+    { "id": "gw-andrea-1", "artistId": "andrea", "title": "Leone realistico", "imageUrl": "assets/mock/images/044a36_06401416037c4fcca8e0defdf5f34ea3~mv2.jpg", "createdAt": "2026-07-13T10:00:00Z" },
+    { "id": "gw-andrea-2", "artistId": "andrea", "title": "Ritratto braccio", "imageUrl": "assets/mock/images/468431765_18339123544145512_1118268265191687081_n.jpg", "createdAt": "2026-07-08T10:00:00Z" },
+    { "id": "gw-andrea-3", "artistId": "andrea", "title": "Aquila petto", "imageUrl": "assets/mock/images/467176223_18338057614145512_7371018193272859372_n.jpg", "createdAt": "2026-06-29T10:00:00Z" },
+    { "id": "gw-andrea-4", "artistId": "andrea", "title": "Lupo avambraccio", "imageUrl": "assets/mock/images/467631017_18338057623145512_5618483136189675318_n.jpg", "createdAt": "2026-06-20T10:00:00Z" },
+    { "id": "gw-andrea-5", "artistId": "andrea", "title": "Tigre schiena", "imageUrl": "assets/mock/images/467631019_18337894393145512_6825510239213493494_n.jpg", "createdAt": "2026-06-12T10:00:00Z" },
+
+    { "id": "gw-bizio-1", "artistId": "bizio", "title": "Drago new school", "imageUrl": "assets/mock/images/466569798_18337311136145512_8074012776796969066_n.jpg", "createdAt": "2026-07-14T10:00:00Z" },
+    { "id": "gw-bizio-2", "artistId": "bizio", "title": "Personaggio anime", "imageUrl": "assets/mock/images/464055290_18334270711145512_1734483189963766649_n.jpg", "createdAt": "2026-07-05T10:00:00Z" },
+    { "id": "gw-bizio-3", "artistId": "bizio", "title": "Fulmine colorato", "imageUrl": "assets/mock/images/468527746_18339033343145512_6898699734506350307_n.jpg", "createdAt": "2026-06-27T10:00:00Z" },
+    { "id": "gw-bizio-4", "artistId": "bizio", "title": "Teschio colorato", "imageUrl": "assets/mock/images/468547377_18339033367145512_5374706525086023568_n.jpg", "createdAt": "2026-06-18T10:00:00Z" },
+    { "id": "gw-bizio-5", "artistId": "bizio", "title": "Mostro kawaii", "imageUrl": "assets/mock/images/468407154_18339023461145512_8903963584228795339_n.jpg", "createdAt": "2026-06-09T10:00:00Z" },
+
+    { "id": "gw-chiaralu-1", "artistId": "chiaralu", "title": "Fiori fineline", "imageUrl": "assets/mock/images/468703628_18339023317145512_5652842763859361550_n.jpg", "createdAt": "2026-07-12T10:00:00Z" },
+    { "id": "gw-chiaralu-2", "artistId": "chiaralu", "title": "Farfalla polso", "imageUrl": "assets/mock/images/468462055_18339023287145512_3313962704175744187_n.jpg", "createdAt": "2026-07-02T10:00:00Z" },
+    { "id": "gw-chiaralu-3", "artistId": "chiaralu", "title": "Serpente blackwork", "imageUrl": "assets/mock/images/468521761_18339022279145512_1098689165788847073_n.jpg", "createdAt": "2026-06-24T10:00:00Z" },
+    { "id": "gw-chiaralu-4", "artistId": "chiaralu", "title": "Luna e stelle", "imageUrl": "assets/mock/images/468649648_18339022312145512_1432378709089728688_n.jpg", "createdAt": "2026-06-15T10:00:00Z" },
+    { "id": "gw-chiaralu-5", "artistId": "chiaralu", "title": "Linea continua braccio", "imageUrl": "assets/mock/images/468405754_18339022576145512_7836775712692967884_n.jpg", "createdAt": "2026-06-06T10:00:00Z" },
+
+    { "id": "gw-patty-1", "artistId": "patty", "title": "Piercing setto", "imageUrl": "assets/mock/images/468474547_18339021388145512_7847577291283244830_n.jpg", "createdAt": "2026-07-15T09:00:00Z" },
+    { "id": "gw-patty-2", "artistId": "patty", "title": "Tooth gem", "imageUrl": "assets/mock/images/468567101_18339021643145512_3164282551568539140_n.jpg", "createdAt": "2026-07-09T09:00:00Z" },
+    { "id": "gw-patty-3", "artistId": "patty", "title": "Microdermal", "imageUrl": "assets/mock/images/468327910_18339020269145512_8474247055261738630_n.jpg", "createdAt": "2026-06-30T09:00:00Z" },
+    { "id": "gw-patty-4", "artistId": "patty", "title": "Piercing orecchio a elica", "imageUrl": "assets/mock/images/468554962_18339020155145512_6356328038693341830_n.jpg", "createdAt": "2026-06-21T09:00:00Z" },
+    { "id": "gw-patty-5", "artistId": "patty", "title": "Anello labbro", "imageUrl": "assets/mock/images/468174820_18338653561145512_4918925267250007090_n.jpg", "createdAt": "2026-06-11T09:00:00Z" }
+  ],
+
+  "products": [
+    {
+      "id": "prod-anello-titanio",
+      "name": "Anello naso in titanio",
+      "description": "Titanio ASTM F136 ipoallergenico, varie misure.",
+      "priceCents": 1500,
+      "imageUrl": "https://picsum.photos/seed/prod-ring/400",
+      "category": "piercingJewelry",
+      "stock": 12
+    },
+    {
+      "id": "prod-cerchio-orecchio",
+      "name": "Cerchio orecchio titanio",
+      "description": "Cerchio a scatto, disponibile in più diametri.",
+      "priceCents": 1800,
+      "imageUrl": "https://picsum.photos/seed/prod-hoop/400",
+      "category": "piercingJewelry",
+      "stock": 20
+    },
+    {
+      "id": "prod-barbell",
+      "name": "Barbell curvo titanio",
+      "description": "Per sopracciglio o cartilagine, con sfere intercambiabili.",
+      "priceCents": 2200,
+      "imageUrl": "https://picsum.photos/seed/prod-barbell/400",
+      "category": "piercingJewelry",
+      "stock": 8
+    },
+    {
+      "id": "prod-crema-lenitiva",
+      "name": "Crema lenitiva post-tatuaggio",
+      "description": "Idrata e lenisce la pelle nei primi giorni di guarigione, 50ml.",
+      "priceCents": 1200,
+      "imageUrl": "https://picsum.photos/seed/prod-cream/400",
+      "category": "aftercareCream",
+      "stock": 30
+    },
+    {
+      "id": "prod-balsamo-cicatrizzante",
+      "name": "Balsamo cicatrizzante",
+      "description": "Favorisce la rigenerazione cutanea, formula naturale, 30ml.",
+      "priceCents": 1400,
+      "imageUrl": "https://picsum.photos/seed/prod-balm/400",
+      "category": "aftercareCream",
+      "stock": 18
+    },
+    {
+      "id": "prod-sapone-neutro",
+      "name": "Sapone neutro detergente",
+      "description": "Per la pulizia quotidiana di tatuaggi e piercing freschi.",
+      "priceCents": 900,
+      "imageUrl": "https://picsum.photos/seed/prod-soap/400",
+      "category": "aftercareCream",
+      "stock": 25
+    }
+  ]
+}
