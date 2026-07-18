@@ -14,14 +14,14 @@
       "name": "Bizio",
       "role": "Tatuatore · Anime · New School",
       "avatarUrl": "assets/mock/images/artisti/bizio.jpg",
-      "acceptsSessions": true
+      "acceptsSessions": false
     },
     {
       "id": "chiaralu",
       "name": "Chiaralu",
       "role": "Tatuatrice · Fineline · Blackwork",
       "avatarUrl": "assets/mock/images/artisti/chiaralu.jpg",
-      "acceptsSessions": true
+      "acceptsSessions": false
     },
     {
       "id": "patty",
